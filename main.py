@@ -1,7 +1,7 @@
 import os
 from mcp.server.fastmcp import FastMCP
 from fastapi import FastAPI
-from starlette.middleware.trustedhost import TrustedHostMiddleware
+#from starlette.middleware.trustedhost import TrustedHostMiddleware
 # Initialize FastMCP server
 # The name will appear in your AI client's UI
 mcp = FastMCP("Render-Demo-Server")
@@ -29,13 +29,13 @@ def get_changerequest(a: int, b: int) -> int:
 api = FastAPI()
 
 # Allow Render host
-api.add_middleware(
-    TrustedHostMiddleware,
-    allowed_hosts=["*", "*.onrender.com"]
-)
+#api.add_middleware(
+ #   TrustedHostMiddleware,
+  #  allowed_hosts=["*", "*.onrender.com"]
+#)
 
 # Mount MCP server
-api.mount("/sse", mcp.sse_app())
+api.mount("/", mcp.sse_app())
 
 app = api
 # Simple health check
@@ -57,6 +57,7 @@ def health():
 #         host="0.0.0.0",
 #         port=port
 #     )
+
 
 
 
