@@ -35,7 +35,7 @@ api.add_middleware(
 )
 
 # Mount MCP server
-api.mount("/", mcp.sse_app())
+api.mount("/sse", mcp.sse_app())
 
 app = api
 # if __name__ == "__main__":
@@ -51,5 +51,6 @@ app = api
 #         host="0.0.0.0",
 #         port=port
 #     )
+
 
 
