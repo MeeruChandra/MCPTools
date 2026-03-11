@@ -1,5 +1,6 @@
 import os
 from mcp.server.fastmcp import FastMCP
+from fastapi import FastAPI
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 # Initialize FastMCP server
 # The name will appear in your AI client's UI
@@ -50,4 +51,5 @@ app = api
 #         host="0.0.0.0",
 #         port=port
 #     )
+
 
