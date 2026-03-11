@@ -31,11 +31,16 @@ api = FastAPI()
 # Allow Render host
 api.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=["*"]   # or ["servicenowtool.onrender.com"]
+    allowed_hosts=["*", "*.onrender.com"]
 )
 
 # Mount MCP server
 api.mount("/sse", mcp.sse_app())
+
+# Simple health check
+@app.get("/")
+def health():
+    return {"status": "running"}
 
 app = api
 # if __name__ == "__main__":
@@ -51,6 +56,7 @@ app = api
 #         host="0.0.0.0",
 #         port=port
 #     )
+
 
 
 
