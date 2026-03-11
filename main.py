@@ -37,6 +37,7 @@ api.add_middleware(
 # Mount MCP server
 api.mount("/sse", mcp.sse_app())
 
+
 # Simple health check
 @app.get("/")
 def health():
@@ -56,6 +57,7 @@ app = api
 #         host="0.0.0.0",
 #         port=port
 #     )
+
 
 
 
