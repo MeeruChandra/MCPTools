@@ -37,13 +37,13 @@ api.add_middleware(
 # Mount MCP server
 api.mount("/sse", mcp.sse_app())
 
-
+app = api
 # Simple health check
 @app.get("/")
 def health():
     return {"status": "running"}
 
-app = api
+
 # if __name__ == "__main__":
 #     # Render provides a PORT environment variable automatically
 #     port = int(os.environ.get("PORT", 8000))
@@ -57,6 +57,7 @@ app = api
 #         host="0.0.0.0",
 #         port=port
 #     )
+
 
 
 
