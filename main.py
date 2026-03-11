@@ -1,6 +1,6 @@
 import os
 from mcp.server.fastmcp import FastMCP
-
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 # Initialize FastMCP server
 # The name will appear in your AI client's UI
 mcp = FastMCP("Render-Demo-Server")
@@ -22,8 +22,21 @@ def get_changerequest(a: int, b: int) -> int:
     print("MCP Server starting add-numbers...")
     return a + b
 
-app = mcp.sse_app()
+#app = mcp.sse_app()
 
+# Create FastAPI wrapper
+api = FastAPI()
+
+# Allow Render host
+api.add_middleware(
+    TrustedHostMiddleware,
+    allowed_hosts=["*"]   # or ["servicenowtool.onrender.com"]
+)
+
+# Mount MCP server
+api.mount("/", mcp.sse_app())
+
+app = api
 # if __name__ == "__main__":
 #     # Render provides a PORT environment variable automatically
 #     port = int(os.environ.get("PORT", 8000))
@@ -37,3 +50,4 @@ app = mcp.sse_app()
 #         host="0.0.0.0",
 #         port=port
 #     )
+
