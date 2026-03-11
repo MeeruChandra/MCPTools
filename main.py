@@ -1,7 +1,9 @@
 import os
 from mcp.server.fastmcp import FastMCP
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import StreamingResponse
 from starlette.middleware.cors import CORSMiddleware
+from starlette.applications import Starlette
 # Initialize FastMCP server
 mcp = FastMCP("Render-Demo-Server")
 @mcp.tool()
@@ -20,8 +22,9 @@ def get_changerequest(a: int, b: int) -> int:
     return a + b
 # Get the MCP SSE app
 mcp_app = mcp.sse_app()
-# Patch the allowed hosts
-if hasattr(mcp_app, 'allowed_hosts'):
+# CRITICAL: Patch the allowed_hosts to accept any host
+if isinstance(mcp_app, Starlette):
+    # Disable host validation by allowing all hosts
     mcp_app.allowed_hosts = ["*"]
 # Create FastAPI wrapper
 api = FastAPI()
@@ -33,10 +36,22 @@ api.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+# Root endpoint
+@api.get("/")
+def root():
+    return {
+        "service": "ServiceNow MCP Server",
+        "status": "running",
+        "endpoints": {
+            "health": "/health",
+            "mcp_sse": "/mcp/sse",
+            "mcp_messages": "/mcp/messages"
+        }
+    }
 # Health check
 @api.get("/health")
 def health():
-    return {"status": "running"}
-# Mount MCP server
+    return {"status": "healthy"}
+# Mount MCP server with patched allowed hosts
 api.mount("/mcp", mcp_app)
 app = api
