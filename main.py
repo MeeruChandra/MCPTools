@@ -18,9 +18,14 @@ def get_changerequest(a: int, b: int) -> int:
     """Adds two numbers together."""
     print("MCP Server starting add-numbers...")
     return a + b
+# Get the MCP SSE app
+mcp_app = mcp.sse_app()
+# Patch the allowed hosts
+if hasattr(mcp_app, 'allowed_hosts'):
+    mcp_app.allowed_hosts = ["*"]
 # Create FastAPI wrapper
 api = FastAPI()
-# Add CORS middleware (important for external access)
+# Add CORS middleware
 api.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -28,10 +33,10 @@ api.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-# Health check BEFORE mounting MCP
+# Health check
 @api.get("/health")
 def health():
     return {"status": "running"}
-# Mount MCP server at /mcp path (not root)
-api.mount("/mcp", mcp.sse_app())
+# Mount MCP server
+api.mount("/mcp", mcp_app)
 app = api
