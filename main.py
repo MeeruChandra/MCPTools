@@ -1,7 +1,5 @@
 import os
 from mcp.server.fastmcp import FastMCP
-from fastapi import FastAPI
-from starlette.middleware.cors import CORSMiddleware
 
 # Initialize FastMCP server
 mcp = FastMCP("Render-Demo-Server")
@@ -16,29 +14,8 @@ def get_changerequest(a: int, b: int) -> int:
     """Adds two numbers together."""
     return a + b
 
-# Create FastAPI app
-app = FastAPI()
-
-# Add CORS middleware - Essential for SSE and cross-origin MCP clients
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# Health check for Render
-@app.get("/health")
-def health():
-    return {"status": "running"}
-
-# Mount MCP server
-# Use the direct sse_app() mounting
-app.mount("/mcp", mcp.sse_app())
-
 if __name__ == "__main__":
-    import uvicorn
-    # Render provides the PORT env var automatically
-    port = int(os.environ.get("PORT", 1000))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    # FastMCP.run() automatically handles the SSE server setup
+    # and correctly configures the ASGI scope validation.
+    port = int(os.getenv("PORT", 1000))
+    mcp.run(transport="sse", host="0.0.0.0", port=port)
