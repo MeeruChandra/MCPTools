@@ -1,3 +1,5 @@
-mcp>=0.1.0
-starlette>=0.47.2
-uvicorn>=0.30.0
+mcp
+starlette
+uvicorn
+fastapi
+httpx
