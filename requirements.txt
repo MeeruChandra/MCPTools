@@ -1,5 +1,4 @@
 mcp
-starlette
 uvicorn
 fastapi
 httpx
