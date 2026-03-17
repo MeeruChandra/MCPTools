@@ -5,7 +5,3 @@ mcp = FastMCP("my_echo_server")
 @mcp.tool()
 def echo(text: str) -> str:
     return text + " From My Test server"
-
-
-if __name__ == "__main__":
-    mcp.run()
