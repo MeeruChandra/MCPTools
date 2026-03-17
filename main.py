@@ -1,17 +1,15 @@
+import os
 from mcp.server.fastmcp import FastMCP
 
-# Create an MCP server
-mcp = FastMCP("my_echo_server", port="8000")
+mcp = FastMCP("my_echo_server")
 
 @mcp.tool()
 def echo(text: str) -> str:
-    """Echo the provided text back to the caller"""
     return text + " From My Test server"
 
 if __name__ == "__main__":
-    mcp.run(transport="http", host="0.0.0.0", port=8000)  # STDIO mode by default
-
-#if __name__ == "__main__":
-    #mcp.run(transport="streamable-http")
-    #mcp.run(transport="sse")
-    #mcp.run()
+    mcp.run(
+        transport="http",
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 8000))
+    )
