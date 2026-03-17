@@ -8,8 +8,8 @@ def echo(text: str) -> str:
     """Echo the provided text back to the caller"""
     return text + " From My Test server"
 
-#if __name__ == "__main__":
-    #mcp.run()  # STDIO mode by default
+if __name__ == "__main__":
+    mcp.run(transport="http", host="0.0.0.0", port=8000)  # STDIO mode by default
 
 #if __name__ == "__main__":
     #mcp.run(transport="streamable-http")
